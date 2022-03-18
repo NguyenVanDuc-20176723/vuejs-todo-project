@@ -4,7 +4,7 @@ import './assets/less/styles.less';
 
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 Vue.use(ViewUI);
 Vue.config.productionTip = false
 

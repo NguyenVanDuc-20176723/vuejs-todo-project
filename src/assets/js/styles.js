@@ -1,11 +1,4 @@
 
-const less = require('less');
+const arr = {"a": 1}
 
-
-
-
-
-less.render(
-    '.name {width: 1 + 1; height: 2*3;}', 
-    (er, css) => console.log(css)
-);
+console.log(arr.a);
