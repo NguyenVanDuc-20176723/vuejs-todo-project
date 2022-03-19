@@ -1,23 +1,11 @@
 <template>
     <div class="container">
       <h2 class="text-center">My todo app vue</h2>
-      <div class="d-flex">
-        <input type="text" placeholder="Enter task" class="form-control"/>
+      <div class="row">
+        <div class="col" v-for="(status, index) in statusTask" :key="index">
+          <TodoList :tasks="filterTask(status)" :name="status" @handleAddTask="handleAddTask"/>
+        </div>
       </div>
-      <table class="table table-bordered">
-        <tr class="text-center">
-          <th>Task name</th>
-          <th>Status</th>
-          <th>#</th>
-          <th>#</th>
-        </tr>
-        <tr v-for="(task, index) in tasks" :key="index" class="text-center">
-          <td class="text-start">{{task.name }}</td>
-          <td>{{task.status}}</td>
-          <td>Edit</td>
-          <td>Delete</td>
-        </tr>
-      </table>
     </div>
 </template>
 
@@ -26,26 +14,44 @@
 
 
 <script>
-import useStorage from '../hooks/localStorage.js'
+import useStorage from '../hooks/localStorage.js';
+import TodoList from './TodoList.vue';
 export default {
   name: 'TodoApp',
   data() {
     const [items, putItems, clearItems] = useStorage();
+    const status_task = ['todo', 'in-progress', 'completed']
     const obj = [{
       "name": "learn Lodash",
-      "status": "todo"
+      "status": "in-progress"
     },{
       "name": "learn Axios",
-      "status": 'todo'
+      "status": 'completed'
     }];
-
-    putItems(obj);
+    if (!items || items.length === 0) putItems(obj);
 
     return {
       tasks: items,
       putTasks: putItems,
-      clearTasks: clearItems
+      clearTasks: clearItems,
+      statusTask: status_task
     }
+  },
+  components: {
+    TodoList
+  },
+  methods: {
+    handleAddTask(obj){
+      this.putTasks([...this.tasks, obj]);
+    },
+    filterTask(status){
+      if (this.tasks){
+        return this.tasks.filter(task => task.status === status);
+      }
+    }
+  },
+  computed: {
+
   }
 }
 </script>
