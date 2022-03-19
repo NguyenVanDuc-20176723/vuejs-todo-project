@@ -1,24 +1,26 @@
 <template>
     <div>
-        <div class="d-flex">
-            <Input v-model= "task_name" @on-enter="addTask" type="text" placeholder="Enter task"/>
+        <div class="row align-items-center ">
+            <div class="col fs-2 text-capitalize" >{{name}}</div>
+            <div v-if="name === 'todo'" class="col">
+                <Button icon="md-add" @click="createTask">add Task</Button>
+            </div>
         </div>
-        <div>{{name}}</div>
         <List border>
         <ListItem v-for="(task, index) in tasks" :key="index" >
-            <TodoItem :task="task" />
+            <TodoItem :task="task"
+            @handleDelete="handleDelete" 
+            @handleChange="handleChange"
+            @changeTaskName="changeTaskName"
+            />
         </ListItem>
-        <Button icon="md-add">add Task</Button>
       </List>
     </div>
 </template>
 
-
-
-
-
 <script>
 import TodoItem from './TodoItem.vue';
+import {getKey} from '../lib/utils.js';
 export default {
     name: 'TodoList',
     data() {
@@ -36,11 +38,29 @@ export default {
     methods: {
         addTask(){
             this.$emit('handleAddTask', {
+                "key": getKey(),
                 "name": this.task_name,
                 "status": this.name
             });
             this.task_name = '';
             
+        },
+        handleDelete(key){
+            this.$emit('handleDeleteTask', key);
+        },
+        handleChange(obj){
+            this.$emit('handleChangeStatus', obj);
+        },
+        changeTaskName(obj){
+            this.$emit('handleChangeTaskName', obj);
+        },
+        createTask() {
+            const item = {
+                "key": getKey(),
+                "name": "",
+                "status": "todo"
+            };
+            this.$emit('handleAddTask', item);
         }
     }
 }

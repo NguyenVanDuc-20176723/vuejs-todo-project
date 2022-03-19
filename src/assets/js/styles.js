@@ -1,4 +1,3 @@
 
-const arr = {"a": 1}
 
-console.log(arr.a);
+console.log(typeof Date.now());
